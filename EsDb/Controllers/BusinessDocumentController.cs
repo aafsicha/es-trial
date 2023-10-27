@@ -7,27 +7,23 @@ namespace EsDb.Controllers;
 [Route("[controller]")]
 public class BusinessDocumentController : ControllerBase
 {
-    private readonly IQueryBusinessDocuments _queryBusinessDocuments;
-    private readonly ICommandBusinessDocuments _commandBusinessDocuments;
-
-    public BusinessDocumentController(IQueryBusinessDocuments queryBusinessDocuments, ICommandBusinessDocuments commandBusinessDocuments)
-    {
-        _queryBusinessDocuments = queryBusinessDocuments;
-        _commandBusinessDocuments = commandBusinessDocuments;
-    }
-
     [HttpGet(Name = "All")]
-    public IEnumerable<BusinessDocument> Get()
+    public async Task<IEnumerable<BusinessDocument>> Get(
+        [FromServices] IQueryBusinessDocuments queryBusinessDocuments)
     {
-        return _queryBusinessDocuments.GetWeathers();
+        return await queryBusinessDocuments.GetAll();
     }
 
-    [HttpPost(Name = "{name}")]
-    public async Task Post([FromRoute] string name)
+    [HttpPost]
+    public async Task Post(
+        [FromBody] BizDoc doc, 
+        [FromServices] ICommandBusinessDocuments commandBusinessDocuments)
     {
-        await _commandBusinessDocuments.Create(name);
+        await commandBusinessDocuments.Create(doc);
     }
 }
+
+
 
 // app.MapGet("/", async () =>
 // {

@@ -1,27 +1,46 @@
+using System.Text.Json;
 using EsDb.Domain;
+using EventStore.Client;
 
 namespace EsDb.Infra;
 
 public class BusinessDocumentRepository : IBusinessDocumentRepository
 {
-    private readonly List<string> Summaries = new List<string>()
+    private readonly EventStoreClient _client;
+
+    public BusinessDocumentRepository(EventStoreClient client)
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-    
-    public IEnumerable<BusinessDocument> All()
-    {
-        return Enumerable.Range(1, 5).Select(index => new BusinessDocument
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Count)]
-            })
-            .ToArray();
+        _client = client;
     }
     
-    public async Task Save(string temperature)
+    public async Task<IEnumerable<BusinessDocument>> All()
     {
-        Summaries.Add(temperature);
+        var events = _client.ReadStreamAsync(
+         Direction.Forwards,
+         "BusinessDocs",
+         StreamPosition.Start);
+        var res = new List<BusinessDocument>();
+     await foreach (var @event in events)
+     {
+         var evt = JsonSerializer.Deserialize<BusinessDocumentOpened>(@event.Event.Data.Span);
+         res.Add(new BusinessDocument(evt.DocNumber, evt.DocAmount, evt.DocCurrency));
+     }
+
+     return res;
+    }
+    
+    public async Task Save(BizDoc doc)
+    {
+     var evt = new EventData(
+         Uuid.NewUuid(),
+         "BusinessDocumentOpened",
+         JsonSerializer.SerializeToUtf8Bytes(new BusinessDocumentOpened(doc.Id, doc.Number, doc.Version, doc.OccuringDate, doc.Amount, doc.Currency)));
+
+     await _client.AppendToStreamAsync(
+         "BusinessDocs",
+         StreamState.Any,
+         new[] { evt });
     }
 }
+
+public record BusinessDocumentOpened(Guid DocId, string DocNumber, int DocVersion, DateOnly DocOccuringDate, decimal DocAmount, string DocCurrency);

@@ -2,7 +2,7 @@ namespace EsDb.Domain;
 
 public interface IQueryBusinessDocuments
 {
-    IEnumerable<BusinessDocument> GetWeathers();
+    Task<IEnumerable<BusinessDocument>> GetAll();
 }
 
 public class QueryBusinessDocuments : IQueryBusinessDocuments
@@ -13,8 +13,8 @@ public class QueryBusinessDocuments : IQueryBusinessDocuments
     {
         _repository = repository;
     }
-    public IEnumerable<BusinessDocument> GetWeathers()
+    public async Task<IEnumerable<BusinessDocument>> GetAll()
     {
-        return _repository.All();
+        return await _repository.All();
     }
 }

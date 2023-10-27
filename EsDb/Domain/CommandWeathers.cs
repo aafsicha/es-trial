@@ -2,8 +2,10 @@ namespace EsDb.Domain;
 
 public interface ICommandBusinessDocuments
 { 
-    Task Create(string name);
+    Task Create(BizDoc doc);
 }
+
+public record BizDoc(int Version, Guid Id, string Number, decimal Amount, string Currency, DateOnly OccuringDate);
 
 public class CommandBusinessDocuments : ICommandBusinessDocuments
 {
@@ -13,8 +15,8 @@ public class CommandBusinessDocuments : ICommandBusinessDocuments
     {
         _repository = repository;
     }
-    public async Task Create(string name)
+    public async Task Create(BizDoc doc)
     {
-        await _repository.Save(name);
+        await _repository.Save(doc);
     }
 }

@@ -2,6 +2,8 @@ namespace EsDb.Domain;
 
 public interface IBusinessDocumentRepository
 {
-    IEnumerable<BusinessDocument> All();
-    Task Save(string temperature);
+    Task<IEnumerable<BusinessDocument>> All();
+    Task Save(BizDoc doc);
 }
+
+public record BusinessDocument(string Number, decimal Amount, string Currency);
