@@ -1,19 +1,19 @@
 namespace EsDb.Domain;
 
-public interface IQueryWeathers
+public interface IQueryBusinessDocuments
 {
-    IEnumerable<WeatherForecast> GetWeathers();
+    IEnumerable<BusinessDocument> GetWeathers();
 }
 
-public class QueryWeathers : IQueryWeathers
+public class QueryBusinessDocuments : IQueryBusinessDocuments
 {
-    private readonly IWeatherRepository _repository;
+    private readonly IBusinessDocumentRepository _repository;
 
-    public QueryWeathers(IWeatherRepository repository)
+    public QueryBusinessDocuments(IBusinessDocumentRepository repository)
     {
         _repository = repository;
     }
-    public IEnumerable<WeatherForecast> GetWeathers()
+    public IEnumerable<BusinessDocument> GetWeathers()
     {
         return _repository.All();
     }

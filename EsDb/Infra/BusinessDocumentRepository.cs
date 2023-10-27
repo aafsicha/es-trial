@@ -2,16 +2,16 @@ using EsDb.Domain;
 
 namespace EsDb.Infra;
 
-public class WeatherRepository : IWeatherRepository
+public class BusinessDocumentRepository : IBusinessDocumentRepository
 {
     private readonly List<string> Summaries = new List<string>()
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
     
-    public IEnumerable<WeatherForecast> All()
+    public IEnumerable<BusinessDocument> All()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        return Enumerable.Range(1, 5).Select(index => new BusinessDocument
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),

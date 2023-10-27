@@ -1,6 +1,6 @@
 namespace EsDb;
 
-public class WeatherForecast
+public class BusinessDocument
 {
     public DateOnly Date { get; set; }
 

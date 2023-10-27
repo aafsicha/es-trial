@@ -5,27 +5,27 @@ namespace EsDb.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class BusinessDocumentController : ControllerBase
 {
-    private readonly IQueryWeathers _queryWeathers;
-    private readonly ICommandWeathers _commandWeathers;
+    private readonly IQueryBusinessDocuments _queryBusinessDocuments;
+    private readonly ICommandBusinessDocuments _commandBusinessDocuments;
 
-    public WeatherForecastController(IQueryWeathers queryWeathers, ICommandWeathers commandWeathers)
+    public BusinessDocumentController(IQueryBusinessDocuments queryBusinessDocuments, ICommandBusinessDocuments commandBusinessDocuments)
     {
-        _queryWeathers = queryWeathers;
-        _commandWeathers = commandWeathers;
+        _queryBusinessDocuments = queryBusinessDocuments;
+        _commandBusinessDocuments = commandBusinessDocuments;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet(Name = "All")]
+    public IEnumerable<BusinessDocument> Get()
     {
-        return _queryWeathers.GetWeathers();
+        return _queryBusinessDocuments.GetWeathers();
     }
 
-    [HttpPost(Name = "PostWeatherForecast/{name}")]
+    [HttpPost(Name = "{name}")]
     public async Task Post([FromRoute] string name)
     {
-        await _commandWeathers.Create(name);
+        await _commandBusinessDocuments.Create(name);
     }
 }
 

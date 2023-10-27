@@ -1,15 +1,15 @@
 namespace EsDb.Domain;
 
-public interface ICommandWeathers
+public interface ICommandBusinessDocuments
 { 
     Task Create(string name);
 }
 
-public class CommandWeathers : ICommandWeathers
+public class CommandBusinessDocuments : ICommandBusinessDocuments
 {
-    private readonly IWeatherRepository _repository;
+    private readonly IBusinessDocumentRepository _repository;
 
-    public CommandWeathers(IWeatherRepository repository)
+    public CommandBusinessDocuments(IBusinessDocumentRepository repository)
     {
         _repository = repository;
     }
