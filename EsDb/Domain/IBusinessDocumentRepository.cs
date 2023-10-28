@@ -3,7 +3,12 @@ namespace EsDb.Domain;
 public interface IBusinessDocumentRepository
 {
     Task<IEnumerable<BusinessDocument>> All();
-    Task Save(BizDoc doc);
+    Task Save(BusinessDocument doc);
+    Task<BusinessDocument> Fetch(Guid id);
 }
 
-public record BusinessDocument(string Number, decimal Amount, string Currency);
+public enum CreationReason
+{
+    Creation,
+    Hydratation
+}

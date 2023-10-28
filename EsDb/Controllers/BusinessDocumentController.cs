@@ -21,4 +21,23 @@ public class BusinessDocumentController : ControllerBase
     {
         await commandBusinessDocuments.Create(doc);
     }
+    
+    [HttpPost("{id}:postpone")]
+    public async Task Postpone(
+        [FromRoute] Guid id,
+        [FromBody] DateOnly newDate, 
+        [FromServices] ICommandBusinessDocuments commandBusinessDocuments)
+    {
+        await commandBusinessDocuments.Postpone(id, newDate);
+    }
+    
+    [HttpPost("{id}:adjust_amount")]
+    public async Task AdjustAmount(
+        [FromRoute] Guid id,
+        [FromBody] decimal newAmount, 
+        [FromServices] ICommandBusinessDocuments commandBusinessDocuments)
+    {
+        await commandBusinessDocuments.AdjustAmount(id, newAmount);
+    }
+    
 }
